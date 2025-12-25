@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - NT SURVEY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { 
+            background: linear-gradient(135deg, #f4f7f6 0%, #e9eeee 100%); 
+            color: #333; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        
+        .contact-card { 
+            background: #ffffff; 
+            width: 90%; 
+            max-width: 420px; 
+            padding: 40px 30px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Accent Bar */
+        .contact-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #3498db, #2c3e50);
+        }
+
+        h1 { color: #2c3e50; font-size: 30px; margin-bottom: 5px; }
+        .brand { font-weight: 600; color: #7f8c8d; margin-bottom: 30px; display: block; letter-spacing: 1px; }
+
+        .info-section { text-align: left; margin-top: 10px; }
+
+        .contact-item {
+            background: #fdfdfd;
+            border: 1px solid #f0f0f0;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+        .contact-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+
+        .label { 
+            font-size: 11px; 
+            font-weight: 800; 
+            color: #bdc3c7; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            text-transform: uppercase; 
+            margin-bottom: 8px; 
+        }
+        .label i { color: #3498db; font-size: 14px; }
+
+        .value a { 
+            font-size: 15px; 
+            color: #2c3e50; 
+            font-weight: 600; 
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .whatsapp-btn { 
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); 
+            color: white; 
+            text-decoration: none; 
+            padding: 15px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 12px; 
+            font-weight: bold; 
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+        }
+        .whatsapp-btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+        .hours-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-link { 
+            display: inline-block; 
+            margin-top: 30px; 
+            font-size: 14px; 
+            color: #3498db; 
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #2c3e50; }
+
+        .note {
+            font-size: 11px; 
+            color: #95a5a6; 
+            line-height: 1.6;
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contact-card">
+        <h1>Contact Us</h1>
+        <span class="brand">NT SURVEY SUPPORT</span>
+
+        <div class="info-section">
+            <div class="contact-item">
+                <span class="label"><i class="fas fa-envelope"></i> Support Email</span>
+                <div class="value">
+                    <a href="mailto:mushfiqurrahmannaeem@gmail.com">mushfiqurrahmannaeem@gmail.com</a>
+                </div>
+            </div>
+
+            <div class="contact-item">
+                <span class="label"><i class="fas fa-comment-dots"></i> Live Chat</span>
+                <a href="https://wa.me/8801914027088" target="_blank" class="whatsapp-btn">
+                    <i class="fab fa-whatsapp" style="font-size: 20px;"></i> Message on WhatsApp
+                </a>
+            </div>
+
+            <div class="contact-item">
+                <span class="label"><i class="fas fa-clock"></i> Office Hours</span>
+                <div class="hours-box">
+                    <i class="fas fa-calendar-alt" style="color: #e67e22;"></i>
+                    <span>10:00 AM - 10:00 PM (GMT +6)</span>
+                </div>
+            </div>
+            
+            <div class="note">
+                <i class="fas fa-info-circle"></i> 
+                For business inquiries or faster partnership approval, please include your website URL in the email.
+            </div>
+        </div>
+
+        <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

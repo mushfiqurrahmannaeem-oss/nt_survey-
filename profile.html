@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - NT SURVEY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding-bottom: 150px; }
+        .profile-card { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .user-icon { font-size: 50px; background: rgba(255,255,255,0.2); width: 80px; height: 80px; line-height: 80px; border-radius: 50%; margin: 0 auto 15px; border: 2px solid rgba(255,255,255,0.3); }
+        
+        .section-title { padding: 20px 20px 5px; font-weight: bold; color: #2c3e50; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .info-box { background: white; margin: 10px 20px; padding: 18px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        
+        .refer-code { border: 2px dashed #3498db; padding: 12px; display: inline-block; font-weight: bold; letter-spacing: 2px; margin-top: 10px; width: 100%; box-sizing: border-box; text-align: center; color: #2c3e50; background: #f0f7ff; border-radius: 10px; font-size: 18px; }
+        
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f1f1; font-size: 13px; }
+        .history-item:last-child { border-bottom: none; }
+        .status { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .status.approved { background: #d4edda; color: #155724; }
+        .status.pending { background: #fff3cd; color: #856404; }
+        .status.rejected { background: #f8d7da; color: #721c24; }
+
+        /* রঙিন ফুটার লিংক স্টাইল */
+        .footer-links { text-align: center; margin: 30px 20px; padding: 20px 10px; background: #fff; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .footer-links a { text-decoration: none; font-size: 13px; font-weight: 600; margin: 5px; padding: 8px 12px; border-radius: 8px; transition: all 0.3s ease; display: inline-block; }
+        .link-about { color: #3498db; background: #ebf5fb; }
+        .link-contact { color: #e67e22; background: #fef5e7; }
+        .link-policy { color: #9b59b6; background: #f4ecf7; }
+        .footer-links a:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
+        .nav-item { text-align: center; text-decoration: none; color: #7f8c8d; font-size: 12px; flex: 1; }
+        .nav-item i { display: block; font-size: 22px; margin-bottom: 4px; }
+        .nav-item.active { color: #2c3e50; font-weight: bold; }
+
+        .btn-logout { display: block; margin: 20px auto; color: #e74c3c; background: #fdedec; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-logout:hover { background: #fadbd8; }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+        <div class="user-icon"><i class="fas fa-user"></i></div>
+        <h4 id="userEmail" style="margin:5px 0; font-size: 18px;">Loading...</h4>
+        <p id="userUID" style="font-size:12px; opacity: 0.8; letter-spacing: 0.5px;"></p>
+    </div>
+
+    <div class="section-title"><i class="fas fa-gift"></i> Referral Program</div>
+    <div class="info-box">
+        <p style="font-size:13px; margin:0; color: #666;">Invite friends and earn <b>10% bonus</b> coins on every task they complete!</p>
+        <div class="refer-code" id="refCode">......</div>
+        <button onclick="copyRef()" style="width:100%; margin-top:15px; background:#2c3e50; color:white; border:none; padding:12px; border-radius:10px; font-weight: bold; cursor: pointer;"><i class="fas fa-copy"></i> Copy Referral Code</button>
+    </div>
+
+    <div class="section-title"><i class="fas fa-history"></i> Withdraw History</div>
+    <div class="info-box" id="withdrawHistory">
+        <p style="text-align:center; color:#999; font-size:13px; padding: 10px 0;">No records found.</p>
+    </div>
+
+    <div class="section-title"><i class="fas fa-tasks"></i> Completed Tasks</div>
+    <div class="info-box" id="taskHistory">
+        <p style="text-align:center; color:#999; font-size:13px; padding: 10px 0;">No tasks completed yet.</p>
+    </div>
+
+    <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout Account</button>
+
+    <div class="footer-links">
+        <a href="about.html" class="link-about">About Us</a>
+        <a href="contact.html" class="link-contact">Contact Us</a>
+        <a href="policy.html" class="link-policy">Privacy Policy</a>
+        <p style="font-size: 11px; color: #bdc3c7; margin-top: 15px;">Verified Platform &copy; 2025 NT SURVEY</p>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i>Home</a>
+        <a href="profile.html" class="nav-item active"><i class="fas fa-user-circle"></i>Profile</a>
+        <a href="withdraw.html" class="nav-item"><i class="fas fa-wallet"></i>Withdraw</a>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="config.js"></script>
+
+    <script>
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById("userEmail").innerText = user.email;
+                document.getElementById("userUID").innerText = "USER ID: " + user.uid.substring(0,12).toUpperCase();
+                document.getElementById("refCode").innerText = user.uid.substring(0,6).toUpperCase();
+                
+                loadWithdraws(user.uid);
+                loadTaskHistory(user.uid);
+            } else { window.location.href = "index.html"; }
+        });
+
+        function loadWithdraws(uid) {
+            const container = document.getElementById("withdrawHistory");
+            firebase.database().ref("withdraws").orderByChild("uid").equalTo(uid).on("value", (snap) => {
+                if(snap.exists()) {
+                    container.innerHTML = "";
+                    snap.forEach(child => {
+                        const data = child.val();
+                        container.innerHTML += `
+                            <div class="history-item">
+                                <span><i class="fas fa-wallet" style="color:#7f8c8d;"></i> $${data.amount} (${data.method})</span>
+                                <span class="status ${data.status.toLowerCase()}">${data.status}</span>
+                            </div>
+                        `;
+                    });
+                }
+            });
+        }
+
+        function loadTaskHistory(uid) {
+            const container = document.getElementById("taskHistory");
+            firebase.database().ref("users/" + uid + "/task_history").on("value", (snap) => {
+                if(snap.exists()) {
+                    container.innerHTML = "";
+                    snap.forEach(child => {
+                        const data = child.val();
+                        container.innerHTML += `
+                            <div class="history-item">
+                                <span><i class="fas fa-check-circle" style="color:#27ae60;"></i> Task Completed</span>
+                                <span style="color:#27ae60; font-weight:bold;">+${data.points} Coins</span>
+                            </div>
+                        `;
+                    });
+                }
+            });
+        }
+
+        function copyRef() {
+            navigator.clipboard.writeText(document.getElementById("refCode").innerText);
+            alert("Referral Code Copied!");
+        }
+
+        function logout() {
+            if(confirm("Are you sure you want to logout?")) {
+                firebase.auth().signOut().then(() => window.location.href="index.html");
+            }
+        }
+    </script>
+</body>
+</html>

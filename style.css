@@ -1,0 +1,733 @@
+:root {
+  --brand: #00d2ff;
+  --secondary: #3a7bd5;
+  --bg: #f0f4f8;
+  --text: #2d3436;
+  --white: #ffffff;
+  --grad: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+}
+
+* { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+body { background: var(--bg); margin: 0; padding: 20px; color: var(--text); line-height: 1.6; }
+
+.container { max-width: 600px; margin: 40px auto; }
+
+.card { 
+  background: var(--white); 
+  padding: 30px; 
+  border-radius: 20px; 
+  box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+.header { text-align: center; margin-bottom: 30px; }
+.logo { 
+  width: 70px; height: 70px; background: var(--grad); 
+  margin: 0 auto 15px; border-radius: 18px; 
+  display: flex; align-items: center; justify-content: center; 
+  color: #fff; font-weight: bold; font-size: 24px; box-shadow: 0 10px 20px rgba(58,123,213,0.3);
+}
+
+h1, h2, h3 { color: #1e272e; margin-top: 0; }
+
+input, select, textarea { 
+  width: 100%; padding: 14px; margin: 10px 0; 
+  border-radius: 12px; border: 2px solid #edf2f7; 
+  outline: none; transition: 0.3s;
+}
+
+input:focus { border-color: var(--brand); box-shadow: 0 0 10px rgba(0,210,255,0.1); }
+
+button, .btn { 
+  width: 100%; padding: 14px; border-radius: 12px; border: none; 
+  background: var(--grad); color: white; font-weight: 700; 
+  cursor: pointer; transition: 0.3s; margin-top: 10px; display: block; text-align: center; text-decoration: none;
+}
+
+button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(58,123,213,0.4); }
+
+.btn-ghost { background: transparent; color: var(--secondary); border: 2px solid var(--secondary); margin-top: 10px; }
+
+.survey-box {
+    background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 10px;
+    border-left: 5px solid var(--brand); display: flex; justify-content: space-between; align-items: center;
+}
+
+.progress-bar {
+    background: #e2e8f0; height: 8px; border-radius: 10px; margin: 15px 0; overflow: hidden;
+}
+.progress-fill { background: var(--grad); height: 100%; width: 0%; transition: 0.5s; }
+.survey-box {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    border: 1px solid #f0f0f0;
+}
+.progress-bar {
+    background: #eee;
+    height: 10px;
+    border-radius: 5px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+.progress-fill {
+    background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+    height: 100%;
+    transition: 0.5s;
+}
+/* Mobile Responsive and Design Update */
+.container { 
+    max-width: 480px; /* Mobile width */
+    margin: 20px auto; 
+    padding: 0 15px;
+}
+
+.card { 
+    background: #ffffff; 
+    padding: 25px; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+}
+
+.survey-box {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    border: 1px solid #f0f0f0;
+}
+
+/* Progress bar design */
+.progress-bar {
+    background: #eee;
+    height: 10px;
+    border-radius: 5px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+.progress-fill {
+    background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+    height: 100%;
+    transition: 0.5s;
+}
+
+/* Responsive fix for inputs */
+input, select, button {
+    font-size: 16px; /* Prevents auto-zoom on iPhone */
+}
+:root {
+    --primary: #0084ff;
+    --success: #00c853;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #333;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px; /* Mobile focused width */
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    margin-bottom: 15px;
+}
+
+h2, h3 { margin: 0 0 10px 0; color: #1a1a1a; }
+
+.balance-card {
+    background: linear-gradient(135deg, #0084ff, #00c853);
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+.balance-card h1 { margin: 5px 0; font-size: 32px; }
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+}
+
+button, .btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn-ghost {
+    background: #f0f0f0;
+    color: #555;
+}
+
+.survey-item {
+    background: #fff;
+    border-left: 5px solid var(--primary);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.progress-container {
+    background: #e0e0e0;
+    height: 8px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.progress-bar {
+    background: var(--success);
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+/* Reset & Prevent Zoom */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Stops blue flash on click */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+    height: 100vh;
+    overflow: hidden; /* Prevent body scroll, use container scroll */
+}
+
+.mobile-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Header Design */
+.main-header {
+    background: #007bff;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 0 0 20px 20px;
+}
+
+.balance-pill {
+    font-size: 32px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.balance-pill i { color: #ffd700; }
+
+/* Task List Area - Scrollable */
+.task-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: 90px; /* Space for Nav */
+}
+
+.section-title { font-size: 16px; margin-bottom: 15px; color: #555; }
+
+.survey-item {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.btn-start {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* THE STICKY BOTTOM NAV */
+.bottom-tab-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-bottom: env(safe-area-inset-bottom); /* For iPhone notch area */
+}
+
+.tab-item {
+    text-decoration: none;
+    color: #a0a0a0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.tab-item i { font-size: 20px; margin-bottom: 4px; }
+.tab-item span { font-size: 11px; font-weight: 500; }
+
+.tab-item.active { color: #007bff; }
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --bg: #f3f4f6;
+    --white: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { background: var(--bg); overflow-x: hidden; }
+
+/* Landing Page Design */
+.landing-page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    padding: 20px;
+}
+
+.welcome-card {
+    background: var(--white);
+    padding: 40px 30px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+}
+
+.logo-box {
+    width: 70px;
+    height: 70px;
+    background: #eff6ff;
+    color: var(--primary);
+    font-size: 32px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+}
+
+h1 { font-size: 26px; color: #111827; margin-bottom: 12px; }
+p { color: #4b5563; font-size: 15px; line-height: 1.5; margin-bottom: 30px; }
+
+.auth-buttons { display: flex; flex-direction: column; gap: 12px; }
+
+.btn-main {
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-sub {
+    background: #f9fafb;
+    color: #374151;
+    text-decoration: none;
+    padding: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.trust-badges {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Dashboard Bottom Nav */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 11px;
+    text-align: center;
+}
+
+.nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+.nav-item.active { color: var(--primary); }
+/* Reset & Mobile App View */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; height: 100vh; overflow: hidden; }
+
+/* Dashboard Layout */
+.app-container { height: 100vh; display: flex; flex-direction: column; }
+
+/* Header: Balance */
+.header-box { background: #007bff; color: white; padding: 30px 20px; text-align: center; border-radius: 0 0 25px 25px; }
+.balance-info h2 { font-size: 32px; margin-top: 5px; }
+
+/* Task Section */
+.content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 80px; }
+.survey-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.info strong { display: block; font-size: 16px; }
+.info span { color: #28a745; font-weight: bold; font-size: 14px; }
+.start-btn { background: #007bff; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 600; }
+
+/* FIXED BOTTOM NAVIGATION (Like Real Apps) */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: white; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
+.nav-item { text-decoration: none; color: #777; font-size: 11px; text-align: center; flex: 1; }
+.nav-item i { font-size: 22px; display: block; margin-bottom: 3px; }
+.nav-item.active { color: #007bff; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Segoe UI', sans-serif; background: #f3f5f8; height: 100vh; overflow: hidden; }
+
+.app-wrap { display: flex; flex-direction: column; height: 100vh; }
+
+.top-header { background: #007bff; color: white; padding: 35px 20px; text-align: center; border-radius: 0 0 25px 25px; }
+.coin-card { font-size: 30px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.coin-card i { color: #ffd700; }
+
+.main-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 90px; }
+.section-title { font-size: 16px; margin-bottom: 15px; color: #555; }
+
+.survey-card { 
+    background: white; padding: 15px; border-radius: 15px; margin-bottom: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card-info strong { display: block; font-size: 16px; color: #333; }
+.card-info p { color: #28a745; font-weight: bold; margin-top: 4px; }
+
+.btn-start { background: #007bff; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 600; }
+
+/* THE BOTTOM TAB BAR (Fixed and Styled) */
+.bottom-tab-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 70px;
+    background: white; display: flex; justify-content: space-around;
+    align-items: center; border-top: 1px solid #eee; z-index: 1000;
+}
+
+.tab-item { text-decoration: none; color: #999; display: flex; flex-direction: column; align-items: center; flex: 1; }
+.tab-item i { font-size: 20px; margin-bottom: 4px; }
+.tab-item span { font-size: 11px; font-weight: 500; }
+.tab-item.active { color: #007bff; }
+/* Admin Panel Modern UI */
+.admin-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.admin-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.admin-card h2, .admin-card h3 {
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.admin-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.admin-input-group input {
+    padding: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 15px;
+    background: #f9f9f9;
+    outline: none;
+    transition: 0.3s;
+}
+
+.admin-input-group input:focus {
+    border-color: #007bff;
+    background: #fff;
+}
+
+.admin-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+/* Published Survey List Style */
+#adminSurveyList, #pendingW {
+    margin-top: 20px;
+}
+
+.admin-item-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 5px solid #007bff;
+}
+
+.delete-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size:
+/* Admin container-e scroll enable korar jonno eita update koren */
+body {
+    height: auto; /* Age height: 100vh ebong overflow: hidden chilo, oita bad hobe */
+    overflow-y: auto !important; 
+    background: #f3f5f8;
+}
+
+.admin-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    padding-bottom: 100px; /* Niche ektu khali jayga rakhar jonno */
+}
+
+.admin-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+/* 1. Global Reset & Basic Scroll Fix */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+}
+
+/* 2. Body update: Overflow hidden bad diye auto kora hoyeche */
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: #f3f5f8; 
+    color: #333; 
+    min-height: 100vh;
+    overflow-y: auto !important; /* Force scroll to be active */
+}
+
+/* 3. Admin Container Styles */
+.admin-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 15px;
+    padding-bottom: 120px; /* Niche list thakle jeno last item dekha jay */
+}
+
+.admin-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    border: 1px solid #f0f0f0;
+}
+
+/* 4. Admin Inputs & Buttons */
+.admin-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.admin-input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #edf2f7;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.admin-input-group input:focus {
+    border-color: #007bff;
+    background: #fff;
+}
+
+.admin-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(58,123,213,0.3);
+}
+
+/* 5. Published Survey & Withdraw List Items */
+.admin-item-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    border-left: 5px solid #00d2ff;
+}
+
+.delete-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* 6. Withdrawal Card Special UI */
+#pendingW .withdraw-item {
+    background: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 12px;
+    border: 1px solid #eee;
+}
+
+#pendingW button {
+    background: #28a745;
+    margin-top: 10px;
+}
+
+/* Section Titles */
+h2, h3 { margin-bottom: 15px; color: #1e272e; text-align: center; }
+/* Body-te scroll enable kora */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f3f5f8;
+    margin: 0;
+    padding: 0;
+/* --- Final Scroll Fix --- */
+html, body {
+    height: auto !important; 
+    min-height: 100vh !important;
+    overflow-y: auto !important; /* Force scroll */
+    overflow-x: hidden !important; /* Stop zoom/side scroll */
+    position: relative !important;
+}
+
+/* Apnar dashboard ba admin-er main container */
+.app-wrap, .mobile-container, .app-container, .admin-container {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    display: block !important;
+}
+
+/* Niche extra padding jeno last item dekha jay */
+.admin-container {
+    padding-bottom: 150px !important;
+}
+/* Scroll somoshya thik korar jonno */
+html, body {
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+}
+
+.admin-container {
+    min-height: 100vh;
+    padding: 20px;
+    display: block !important; /* Flex thakle scroll e somoshya hote pare */
+}
+
+.admin-card {
+    max-height: none !important; /* Card jeno boro hote pare */
+    overflow: visible !important;
+    margin-bottom: 20px;
+}
+.survey-info p { margin: 5px 0; color: #666; font-size: 13px; line-height: 1.4; }
+.survey-card { align-items: flex-start; } /* Card gulo description thakle boro hobe */

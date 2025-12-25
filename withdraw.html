@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw - NT SURVEY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding-bottom: 150px; }
+        .header { background: #fff; padding: 25px; text-align: center; border-bottom: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .coin-box { font-size: 32px; font-weight: bold; color: #2c3e50; margin-top: 5px; }
+        .form-container { padding: 20px; max-width: 400px; margin: auto; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 14px; }
+        input, select { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+        .btn-withdraw { width: 100%; padding: 15px; background: #2c3e50; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .btn-withdraw:hover { background: #34495e; }
+        
+        /* ফুটার লিংক স্টাইল */
+        .footer-links { text-align: center; margin-top: 40px; padding: 20px; background: #fff; border-radius: 15px; margin: 20px; }
+        .footer-links a { text-decoration: none; font-size: 13px; font-weight: 600; margin: 5px; padding: 8px 12px; border-radius: 8px; display: inline-block; }
+        .link-about { color: #3498db; background: #ebf5fb; }
+        .link-contact { color: #e67e22; background: #fef5e7; }
+        .link-policy { color: #9b59b6; background: #f4ecf7; }
+
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #eee; z-index: 1000; }
+        .nav-item { text-align: center; text-decoration: none; color: #7f8c8d; font-size: 12px; flex: 1; }
+        .nav-item i { display: block; font-size: 22px; margin-bottom: 4px; }
+        .nav-item.active { color: #2c3e50; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <p style="margin:0; color:#888; font-weight: 500;">Available Balance</p>
+        <div class="coin-box"><i class="fas fa-coins" style="color:#f1c40f;"></i> <span id="coins">0</span></div>
+    </div>
+
+    <div class="form-container">
+        <div class="input-group">
+            <label><i class="fas fa-university"></i> Select Payment Method</label>
+            <select id="wd_method" onchange="updatePlaceholder()">
+                <option value="Bkash">Bkash</option>
+                <option value="USD">USD (Binance/USDT)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label id="account_label"><i class="fas fa-id-card"></i> Bkash Number</label>
+            <input type="text" id="wd_account" placeholder="Enter your Bkash number">
+        </div>
+
+        <div class="input-group">
+            <label><i class="fas fa-money-bill-wave"></i> Withdraw Amount (Min: 500)</label>
+            <input type="number" id="wd_coins" placeholder="Enter coins">
+        </div>
+
+        <button class="btn-withdraw" onclick="requestWithdraw()">Submit Request</button>
+
+        <div class="footer-links">
+            <a href="about.html" class="link-about">About Us</a>
+            <a href="contact.html" class="link-contact">Contact Us</a>
+            <a href="policy.html" class="link-policy">Privacy Policy</a>
+            <p style="font-size: 11px; color: #bdc3c7; margin-top: 15px;">Verified Platform &copy; 2025 NT SURVEY</p>
+        </div>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i>Home</a>
+        <a href="withdraw.html" class="nav-item active"><i class="fas fa-wallet"></i>Withdraw</a>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="withdraw.js"></script>
+
+    <script>
+        function updatePlaceholder() {
+            const method = document.getElementById("wd_method").value;
+            const label = document.getElementById("account_label");
+            const input = document.getElementById("wd_account");
+
+            if (method === "Bkash") {
+                label.innerHTML = '<i class="fas fa-id-card"></i> Bkash Number';
+                input.placeholder = "Enter your Bkash number";
+            } else {
+                label.innerHTML = '<i class="fas fa-wallet"></i> USD Address';
+                input.placeholder = "Enter USDT (TRC20) or Binance Address";
+            }
+        }
+    </script>
+</body>
+</html>

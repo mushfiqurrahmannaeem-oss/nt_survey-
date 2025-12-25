@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard - NT SURVEY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        html, body { margin: 0; padding: 0; width: 100%; font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; }
+        .balance-header { background: #fff; padding: 25px; text-align: center; border-bottom: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .balance-header h2 { margin: 10px 0 0; font-size: 32px; color: #2c3e50; }
+        .fa-coins { color: #f1c40f; }
+
+        .container { padding: 20px; padding-bottom: 120px; }
+
+        /*    */
+        @keyframes descriptionGlow {
+            0% { border-color: #ddd; box-shadow: 0 0 0px rgba(0,0,0,0); }
+            50% { border-color: #ffc107; box-shadow: 0 0 10px rgba(255, 193, 7, 0.3); }
+            100% { border-color: #ddd; box-shadow: 0 0 0px rgba(0,0,0,0); }
+        }
+
+        .survey-card { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .card-main { display: flex; justify-content: space-between; align-items: center; }
+        
+        .survey-desc {
+            animation: descriptionGlow 2s infinite;
+            border: 1.5px dashed #ffc107; background: #fffdf0;
+            color: #555; font-size: 13px; line-height: 1.5;
+            padding: 10px; border-radius: 8px; margin-top: 10px;
+            cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden; transition: all 0.3s ease;
+        }
+        .survey-desc.active { display: block; -webkit-line-clamp: initial; background: #fffbe6; }
+        .survey-desc::before { content: " Instructions (Read carefully):"; display: block; font-weight: bold; color: #d35400; font-size: 11px; margin-bottom: 4px; }
+
+        .btn-start { background: #2c3e50; color: white; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        /*     */
+        .footer-links { 
+            text-align: center; 
+            margin-top: 40px; 
+            padding: 20px 10px; 
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+        .footer-links a { 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: 600;
+            margin: 5px; 
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .link-about { color: #3498db; background: #ebf5fb; }
+        .link-contact { color: #e67e22; background: #fef5e7; }
+        .link-policy { color: #9b59b6; background: #f4ecf7; }
+        
+        .footer-links a:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+        .copyright-text { font-size: 11px; color: #bdc3c7; margin-top: 15px; }
+
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
+        .nav-item { text-align: center; text-decoration: none; color: #7f8c8d; font-size: 12px; flex: 1; }
+        .nav-item i { display: block; font-size: 22px; margin-bottom: 4px; }
+        .nav-item.active { color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+    <header class="balance-header">
+        <p style="margin:0; color: #7f8c8d;">Current Balance</p>
+        <h2><i class="fas fa-coins"></i> <span id="coins">0</span></h2>
+    </header>
+
+    <main class="container">
+        <h3 style="border-left: 5px solid #2c3e50; padding-left: 10px; color: #2c3e50;">Available Tasks</h3>
+        <div id="surveyList"></div>
+
+        <div class="footer-links">
+            <a href="about.html" class="link-about"><i class="fas fa-info-circle"></i> About Us</a>
+            <a href="contact.html" class="link-contact"><i class="fas fa-envelope"></i> Contact Us</a>
+            <a href="policy.html" class="link-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a>
+            
+            <p class="copyright-text">
+                <i class="fas fa-check-circle" style="color: #27ae60;"></i> 
+                Verified Platform &copy; 2025 NT SURVEY
+            </p>
+        </div>
+    </main>
+
+    <nav class="nav-bar">
+        <a href="dashboard.html" class="nav-item active"><i class="fas fa-home"></i>Home</a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i>Profile</a>
+        <a href="withdraw.html" class="nav-item"><i class="fas fa-wallet"></i>Withdraw</a>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="config.js"></script>
+
+    <script>
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                firebase.database().ref("users/" + user.uid + "/balance").on("value", (snap) => {
+                    document.getElementById("coins").innerText = snap.val() || 0;
+                });
+                loadSurveys(user.uid);
+            } else { window.location.href = "index.html"; }
+        });
+
+        function loadSurveys(uid) {
+            const listDiv = document.getElementById("surveyList");
+            firebase.database().ref("surveys").on("value", (snap) => {
+                listDiv.innerHTML = "";
+                if (!snap.exists()) {
+                    listDiv.innerHTML = "<p style='text-align:center; color:#999; margin-top:20px;'>No tasks available.</p>";
+                    return;
+                }
+                snap.forEach((child) => {
+                    const data = child.val();
+                    const link = data.link.includes('?') ? `${data.link}&subid=${uid}` : `${data.link}?subid=${uid}`;
+                    const card = document.createElement("div");
+                    card.className = "survey-card";
+                    card.innerHTML = `
+                        <div class="card-main">
+                            <div><h4>${data.title}</h4><span><i class="fas fa-coins"></i> ${data.reward} Coins</span></div>
+                            <button class="btn-start" onclick="window.open('${link}', '_blank')">Start</button>
+                        </div>
+                        <div class="survey-desc" onclick="this.classList.toggle('active')">${data.desc || "Complete task to earn."}</div>
+                    `;
+                    listDiv.appendChild(card);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
