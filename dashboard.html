@@ -8,34 +8,53 @@
     
     <style>
         html, body { margin: 0; padding: 0; width: 100%; font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; }
+        
+        /*     */
+        .translate-wrapper {
+            background: #fff;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        .translate-label { font-size: 12px; color: #7f8c8d; font-weight: 600; }
+        #google_translate_element { min-height: 25px; }
+
         .balance-header { background: #fff; padding: 25px; text-align: center; border-bottom: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .balance-header h2 { margin: 10px 0 0; font-size: 32px; color: #2c3e50; }
-        .fa-coins { color: #f1c40f; }
+        .balance-header p { margin: 0; color: #7f8c8d; font-size: 14px; }
+        .balance-header h2 { margin: 10px 0 0; font-size: 35px; color: #2c3e50; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        .fa-coins { 
+            color: #f1c40f; 
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+            animation: coinRotate 3s linear infinite;
+        }
+        @keyframes coinRotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
         .container { padding: 20px; padding-bottom: 120px; }
-        @keyframes descriptionGlow {
-            0% { border-color: #ddd; box-shadow: 0 0 0px rgba(0,0,0,0); }
-            50% { border-color: #ffc107; box-shadow: 0 0 10px rgba(255, 193, 7, 0.3); }
-            100% { border-color: #ddd; box-shadow: 0 0 0px rgba(0,0,0,0); }
-        }
-        .survey-card { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .survey-card { background: #fff; padding: 18px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; }
         .card-main { display: flex; justify-content: space-between; align-items: center; }
+        
         .survey-desc {
-            animation: descriptionGlow 2s infinite;
-            border: 1.5px dashed #ffc107; background: #fffdf0;
+            background: #fffdf0; border: 1px dashed #f1c40f;
             color: #555; font-size: 13px; line-height: 1.5;
-            padding: 10px; border-radius: 8px; margin-top: 10px;
-            cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical; overflow: hidden; transition: all 0.3s ease;
+            padding: 10px; border-radius: 8px; margin-top: 12px;
         }
-        .survey-desc.active { display: block; -webkit-line-clamp: initial; background: #fffbe6; }
-        .survey-desc::before { content: "📋 Instructions (Read carefully):"; display: block; font-weight: bold; color: #d35400; font-size: 11px; margin-bottom: 4px; }
-        .btn-start { background: #2c3e50; color: white; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .footer-links { text-align: center; margin-top: 40px; padding: 20px 10px; background: #fff; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        .footer-links a { text-decoration: none; font-size: 13px; font-weight: 600; margin: 5px; padding: 8px 12px; border-radius: 8px; transition: all 0.3s ease; display: inline-block; }
+        .survey-desc::before { content: " Instructions:"; display: block; font-weight: bold; color: #d35400; margin-bottom: 3px; }
+
+        .btn-start { background: #2c3e50; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-start:hover { background: #1a252f; transform: scale(1.05); }
+
+        .footer-links { text-align: center; margin-top: 30px; padding: 20px; background: #fff; border-radius: 15px; }
+        .footer-links a { text-decoration: none; font-size: 13px; font-weight: 600; margin: 5px; padding: 8px 12px; border-radius: 8px; display: inline-block; }
         .link-about { color: #3498db; background: #ebf5fb; }
         .link-contact { color: #e67e22; background: #fef5e7; }
         .link-policy { color: #9b59b6; background: #f4ecf7; }
-        .copyright-text { font-size: 11px; color: #bdc3c7; margin-top: 15px; }
+        
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
         .nav-item { text-align: center; text-decoration: none; color: #7f8c8d; font-size: 12px; flex: 1; }
         .nav-item i { display: block; font-size: 22px; margin-bottom: 4px; }
@@ -44,21 +63,26 @@
 </head>
 <body>
 
+    <div class="translate-wrapper">
+        <span class="translate-label"><i class="fas fa-language"></i> SELECT LANGUAGE</span>
+        <div id="google_translate_element"></div>
+    </div>
+
     <header class="balance-header">
-        <p style="margin:0; color: #7f8c8d;">Current Balance</p>
+        <p>Current Balance</p>
         <h2><i class="fas fa-coins"></i> <span id="coins">0</span></h2>
-        <div id="countryDisplay" style="font-size: 12px; color: #95a5a6; margin-top: 5px;"></div>
+        <div id="countryDisplay" style="font-size: 12px; color: #95a5a6; margin-top: 8px; font-weight: bold;"></div>
     </header>
 
     <main class="container">
-        <h3 style="border-left: 5px solid #2c3e50; padding-left: 10px; color: #2c3e50;">Available Tasks</h3>
+        <h3 style="border-left: 5px solid #2c3e50; padding-left: 10px; color: #2c3e50; margin-bottom: 20px;">Available Tasks</h3>
         <div id="surveyList"></div>
 
         <div class="footer-links">
             <a href="about.html" class="link-about"><i class="fas fa-info-circle"></i> About Us</a>
             <a href="contact.html" class="link-contact"><i class="fas fa-envelope"></i> Contact Us</a>
             <a href="policy.html" class="link-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a>
-            <p class="copyright-text">Verified Platform &copy; 2025 NT SURVEY</p>
+            <p style="font-size: 11px; color: #bdc3c7; margin-top: 15px;">Verified Platform &copy; 2025 NT SURVEY</p>
         </div>
     </main>
 
@@ -73,13 +97,23 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <script src="config.js"></script>
 
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,bn,hi,ar,es,fr', // English, Bengali, Hindi, Arabic, Spanish, French
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <script>
-        // আপনার সিলেক্ট করা ১৫টি High CPM দেশের লিস্ট
         const highCPMCountries = ["US", "GB", "CA", "AU", "DE", "FR", "NL", "SE", "CH", "NO", "DK", "NZ", "IE", "AT", "BE"];
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                // ব্যালেন্স সিঙ্ক করা
                 firebase.database().ref("users/" + user.uid + "/balance").on("value", (snap) => {
                     document.getElementById("coins").innerText = snap.val() || 0;
                 });
@@ -92,37 +126,30 @@
         async function loadLocalizedSurveys(uid) {
             const listDiv = document.getElementById("surveyList");
             const countryDiv = document.getElementById("countryDisplay");
-            listDiv.innerHTML = "<p style='text-align:center;'>Loading smart tasks...</p>";
+            listDiv.innerHTML = "<p style='text-align:center; padding:20px;'>Loading smart tasks...</p>";
 
             let userCategory = "Others"; 
 
             try {
-                // আইপি থেকে দেশ শনাক্ত করা
                 const geoRes = await fetch('https://ipapi.co/json/');
                 const geoData = await geoRes.json();
                 const code = geoData.country_code; 
 
-                // হেডার এ দেশ দেখানো
                 if(countryDiv) {
-                    countryDiv.innerHTML = `<img src="https://flagcdn.com/w20/${code.toLowerCase()}.png" width="16"> ${geoData.country_name}`;
+                    countryDiv.innerHTML = `<img src="https://flagcdn.com/w20/${code.toLowerCase()}.png" width="16" style="vertical-align:middle;"> ${geoData.country_name}`;
                 }
 
-                // হাই সিবিএম চেক লজিক
                 if (highCPMCountries.includes(code)) {
                     userCategory = "HighCPM";
-                } else {
-                    userCategory = "Others";
                 }
             } catch (e) {
-                console.log("Country fetch skipped, showing Others category.");
                 userCategory = "Others"; 
             }
 
-            // সার্ভে ফিল্টারিং লোড
             firebase.database().ref("surveys").on("value", (snap) => {
                 listDiv.innerHTML = "";
                 if (!snap.exists()) {
-                    listDiv.innerHTML = "<p style='text-align:center; color:#999; margin-top:20px;'>No survey  available.</p>";
+                    listDiv.innerHTML = "<p style='text-align:center; color:#999;'>No tasks available right now.</p>";
                     return;
                 }
 
@@ -130,9 +157,23 @@
                 snap.forEach((child) => {
                     const data = child.val();
                     
-                    // লজিক: গ্লোবাল অথবা ইউজারের ক্যাটাগরির সাথে মিললে দেখাবে
                     if (data.target_group === "Global" || data.target_group === userCategory) {
                         found = true;
+
+                        // --- Smart Linker Logic ---
+                        let networkParam = "subid"; // Default
+                        const link = data.link.toLowerCase();
+
+                        if (link.includes("offertoro.com")) networkParam = "pubid";
+                        else if (link.includes("adgatemedia.com")) networkParam = "s1";
+                        else if (link.includes("adgem.com")) networkParam = "player_id";
+                        else if (link.includes("wannads.com")) networkParam = "subid";
+                        else networkParam = "subid"; // For CPAGrip, CPALead etc.
+
+                        const separator = data.link.includes('?') ? '&' : '?';
+                        const finalLink = `${data.link}${separator}${networkParam}=${uid}`;
+                        // --------------------------
+
                         const card = document.createElement("div");
                         card.className = "survey-card";
                         card.innerHTML = `
@@ -141,16 +182,16 @@
                                     <h4 style="margin:0; color:#2c3e50;">${data.title}</h4>
                                     <span style="font-size:14px; color:#27ae60; font-weight:bold;"><i class="fas fa-coins"></i> ${data.reward} Coins</span>
                                 </div>
-                                <button class="btn-start" onclick="window.open('${data.link}', '_blank')">Start</button>
+                                <button class="btn-start" onclick="window.open('${finalLink}', '_blank')">Start</button>
                             </div>
-                            <div class="survey-desc" onclick="this.classList.toggle('active')">${data.desc || "Complete this premium task to earn coins instantly."}</div>
+                            <div class="survey-desc">${data.desc || "Complete this task carefully to earn coins."}</div>
                         `;
                         listDiv.appendChild(card);
                     }
                 });
 
                 if (!found) {
-                    listDiv.innerHTML = "<p style='text-align:center; color:#999;'>No new surveys available  today.</p>";
+                    listDiv.innerHTML = "<p style='text-align:center; color:#999;'>No new tasks for your region.</p>";
                 }
             });
         }
