@@ -1,91 +1,78 @@
-// 1. Auth State Check
-firebase.auth().onAuthStateChanged((user) => {
+const premiumCountries = ["US", "GB", "CA", "AU", "DE", "NO", "SE", "CH", "NL", "FR", "DK", "IE", "NZ", "AT", "BE"];
+
+firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
-        console.log("Dashboard loaded for:", user.email);
-        
-        // User balance load kora
-        // Ekhane db variable-ti config.js theke auto pabe
-        db.ref("users/" + user.uid + "/balance").on("value", (snapshot) => {
+        // ব্যালেন্স লোড (রিয়েলটাইম)
+        firebase.database().ref("users/" + user.uid + "/balance").on("value", (snapshot) => {
             const balance = snapshot.val() || 0;
-            const balElement = document.getElementById("userBalance");
+            const balElement = document.getElementById("coins") || document.getElementById("userBalance");
             if (balElement) balElement.innerText = balance;
         });
 
-        // Dashboard surveys load kora
-        loadDashboardSurveys(user.uid);
+        // সার্ভে লোড করার সময় ইউজারের UID পাঠানো হচ্ছে
+        if (typeof loadDashboardSurveys === "function") {
+            loadDashboardSurveys(user.uid);
+        } else if (typeof loadSurveys === "function") {
+            loadSurveys(user.uid);
+        }
     } else {
         window.location.href = "index.html";
     }
 });
 
-// 2. Published Survey Dashboard-e dekhano
+// অফার ফিল্টারিং এবং ডিসপ্লে লজিক
 function loadDashboardSurveys(uid) {
-    const taskDiv = document.getElementById("surveyList");
+    const taskDiv = document.getElementById("surveyList") || document.getElementById("taskDiv");
     if (!taskDiv) return;
 
-    // Loading status
-    taskDiv.innerHTML = "<p style='text-align:center;color:#999'>Checking for tasks...</p>";
+    // userCountryCode যদি গ্লোবাল ভেরিয়েবল হিসেবে না থাকে, তবে ডিফাল্ট "Unknown"
+    const currentCountry = typeof userCountryCode !== 'undefined' ? userCountryCode : "Unknown";
 
-    // Complete kora survey gulo check kora
-    db.ref("users/" + uid + "/completed_surveys").on("value", (doneSnapshot) => {
-        const completedIds = doneSnapshot.val() || {};
+    firebase.database().ref("surveys").on("value", (snapshot) => {
+        taskDiv.innerHTML = "";
+        let found = false;
 
-        // Main surveys node read kora
-        db.ref("surveys").on("value", (snapshot) => {
-            taskDiv.innerHTML = ""; 
+        snapshot.forEach((child) => {
+            const data = child.val();
+            const target = data.target || "Global"; 
 
-            if (snapshot.exists()) {
-                let found = false;
-                snapshot.forEach((child) => {
-                    const key = child.key;
-                    const data = child.val();
-
-                    // Jodi user eita age na kore thake
-                    if (!completedIds[key]) {
-                        found = true;
-                        const card = document.createElement("div");
-                        card.className = "survey-card";
-                        card.innerHTML = `
-                            <div class="card-info">
-                                <strong>${data.title}</strong>
-                                <p>+${data.reward} Coins</p>
-                            </div>
-                            <button class="btn-start" onclick="startSurvey('${key}', '${data.link}', ${data.reward})">Start</button>
-                        `;
-                        taskDiv.appendChild(card);
-                    }
-                });
-
-                if (!found) {
-                    taskDiv.innerHTML = "<p style='text-align:center; color:#999; margin-top:20px;'>No new tasks available!</p>";
-                }
+            // ১. দেশ অনুযায়ী ফিল্টার লজিক
+            let shouldShow = false;
+            if (premiumCountries.includes(currentCountry)) {
+                if (target === "Premium" || target === "Global") shouldShow = true;
             } else {
-                taskDiv.innerHTML = "<p style='text-align:center; color:#999; margin-top:20px;'>No surveys published.</p>";
+                if (target === "Global") shouldShow = true;
+            }
+
+            if (shouldShow) {
+                found = true;
+
+                // ২. অফার লিঙ্কের সাথে UID (subid) যোগ করার লজিক
+                // যদি লিঙ্কে আগে থেকে '?' থাকে তবে '&' ব্যবহার হবে, নাহলে '?' ব্যবহার হবে
+                const separator = data.link.includes('?') ? '&' : '?';
+                const finalLink = `${data.link}${separator}subid=${uid}`;
+
+                // ৩. কার্ড তৈরি এবং HTML এ যুক্ত করা
+                const card = document.createElement("div");
+                card.className = "survey-card";
+                card.innerHTML = `
+                    <div class="card-main">
+                        <div>
+                            <h4>${data.title}</h4>
+                            <span><i class="fas fa-coins"></i> ${data.reward} Coins</span>
+                        </div>
+                        <button class="btn-start" onclick="window.open('${finalLink}', '_blank')">Start</button>
+                    </div>
+                    <div class="survey-desc" onclick="this.classList.toggle('active')">
+                        ${data.desc || "Complete the task carefully to earn your reward."}
+                    </div>
+                `;
+                taskDiv.appendChild(card);
             }
         });
-    });
-}
 
-// 3. Survey start logic
-function startSurvey(key, link, reward) {
-    const user = firebase.auth().currentUser;
-    if (!user) return;
-
-    window.open(link, "_blank");
-
-    // Click korar sathe sathe completed mark kora
-    db.ref("users/" + user.uid + "/completed_surveys/" + key).set(true)
-    .then(() => {
-        // Balance add kora
-        db.ref("users/" + user.uid + "/balance").transaction((current) => {
-            return (current || 0) + reward;
-        });
-    });
-}
-
-// 4. Logout Function
-function logout() {
-    firebase.auth().signOut().then(() => {
-        window.location.href = "index.html";
+        if (!found) {
+            taskDiv.innerHTML = "<p style='text-align:center; color:#999; padding: 20px;'>No tasks available for your location right now.</p>";
+        }
     });
 }

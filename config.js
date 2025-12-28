@@ -1,4 +1,4 @@
-const firebaseConfig = {
+var firebaseConfig = {
   apiKey: "AIzaSyAppPzX0bLfYbYmhdytPRZSO4SmSn6ko5Y",
   authDomain: "nt-tasker-81815.firebaseapp.com",
   databaseURL: "https://nt-tasker-81815-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -8,7 +8,9 @@ const firebaseConfig = {
   appId: "1:72746692206:web:f1ba8df7cceea0e84ec07f"
 };
 
-// Initialize Firebase (compat for easy copy/paste)
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 const auth = firebase.auth();
 const db = firebase.database();

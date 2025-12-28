@@ -1,48 +1,49 @@
-// 1. Admin Login Logic
+/*********************************
+ * ADMIN LOGIN
+ *********************************/
 function adminLogin() {
-    const emailInput = document.getElementById("adminEmail");
-    const passInput = document.getElementById("adminPassword");
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
 
-    if (!emailInput || !passInput) return;
-
-    const email = emailInput.value.trim();
-    const password = passInput.value.trim();
-
-    if (email === "" || password === "") {
-        alert("Please fill in both fields!");
+    if (!email || !password) {
+        alert("Email & Password required!");
         return;
     }
 
     firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(() => {
-        alert("Admin Login Successful!");
-        document.getElementById("loginSection").style.display = "none";
-        document.getElementById("adminDashboard").style.display = "block";
-        
-        loadAdminSurveys(); 
-        loadWithdrawRequests(); 
-    })
-    .catch((error) => {
-        alert("Login Failed: INVALID_LOGIN_CREDENTIALS. Check Firebase Console.");
-    });
+        .then((res) => {
+            const uid = res.user.uid;
+
+            // 🔐 Admin check (Realtime Database)
+            firebase.database().ref("admins/" + uid).once("value")
+                .then((snap) => {
+                    if (snap.exists() && snap.val().role === "admin") {
+                        alert("Admin Login Successful!");
+
+                        document.getElementById("loginSection").style.display = "none";
+                        document.getElementById("adminDashboard").style.display = "block";
+
+                        loadAdminSurveys();
+                        loadWithdrawRequests();
+                    } else {
+                        alert("Access Denied! You are not an admin.");
+                        firebase.auth().signOut();
+                    }
+                });
+        })
+        .catch(err => alert(err.message));
 }
 
-// 2. Publish Survey (Timer Chara)
+
+/*********************************
+ * PUBLISH SURVEY
+ *********************************/
 function publishSurvey() {
-    const titleEl = document.getElementById("surveyTitle");
-    const descEl = document.getElementById("surveyDesc");
-    const rewardEl = document.getElementById("rewardCoins");
-    const linkEl = document.getElementById("surveyLink");
-
-    if (!titleEl || !descEl || !rewardEl || !linkEl) {
-        alert("Error: Some HTML fields are missing!");
-        return;
-    }
-
-    const title = titleEl.value;
-    const desc = descEl.value;
-    const reward = rewardEl.value;
-    const link = linkEl.value;
+    const title = document.getElementById("surveyTitle").value;
+    const desc = document.getElementById("surveyDesc").value;
+    const reward = document.getElementById("rewardCoins").value;
+    const link = document.getElementById("surveyLink").value;
+    const targetGroup = document.getElementById("targetGroup").value;
 
     if (!title || !desc || !reward || !link) {
         alert("Please fill all fields!");
@@ -54,86 +55,123 @@ function publishSurvey() {
         desc: desc,
         reward: parseInt(reward),
         link: link,
+        target_group: targetGroup,
         timestamp: Date.now()
     };
 
-    firebase.database().ref("surveys").push(surveyData).then(() => {
-        alert("Survey Published Successfully!");
-        titleEl.value = ""; 
-        descEl.value = ""; 
-        rewardEl.value = ""; 
-        linkEl.value = "";
-    });
+    firebase.database().ref("surveys").push(surveyData)
+        .then(() => {
+            alert("Survey Published Successfully!");
+
+            document.getElementById("surveyTitle").value = "";
+            document.getElementById("surveyDesc").value = "";
+            document.getElementById("rewardCoins").value = "";
+            document.getElementById("surveyLink").value = "";
+        })
+        .catch(err => alert(err.message));
 }
 
-// 3. Published Survey List (ONLY DESCRIPTION SECTION UPDATED)
+
+/*********************************
+ * LOAD ADMIN SURVEYS
+ *********************************/
 function loadAdminSurveys() {
     const listDiv = document.getElementById("adminSurveyList");
-    if(!listDiv) return;
+    if (!listDiv) return;
 
     firebase.database().ref("surveys").on("value", (snapshot) => {
         listDiv.innerHTML = "";
-        if (snapshot.exists()) {
-            snapshot.forEach(child => {
-                const data = child.val();
-                const key = child.key;
-                
-                const div = document.createElement("div");
-                div.style = "background:#fff; padding:15px; margin-bottom:15px; border-radius:12px; border:1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05);";
-                div.innerHTML = `
-                    <div style="margin-bottom: 10px;">
-                        <strong style="display:block; font-size: 16px; color:#333;">${data.title}</strong>
-                        
-                        <div onclick="this.style.display='block'; this.style.webkitLineClamp='initial'; this.style.background='#fffbe6'; this.style.borderColor='#ffc107';" 
-                             style="color:#555; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-size:13px; background:#f9f9f9; padding:8px; border-radius:8px; border:1.5px dashed #ccc; cursor:pointer; margin-top:8px; transition: all 0.3s ease;">
-                             <span style="color:#d35400; font-weight:bold; font-size:11px; display:block; margin-bottom:4px;">📢 READ DESCRIPTION (CLICK TO EXPAND):</span>
-                             ${data.desc || ''}
-                        </div>
-                        
-                        <div style="margin-top:8px;">
-                            <span style="color:#28a745; font-size:14px; font-weight: bold;">💰 ${data.reward} Coins</span>
-                        </div>
-                    </div>
-                    <button onclick="deleteSurvey('${key}')" style="background:#ff4757; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; width: 100%; font-weight:bold;">Delete Survey</button>
-                `;
-                listDiv.appendChild(div);
-            });
-        } else {
-            listDiv.innerHTML = "<p style='text-align:center; color:gray;'>No surveys published.</p>";
+
+        if (!snapshot.exists()) {
+            listDiv.innerHTML = "<p style='text-align:center;color:gray;'>No surveys published.</p>";
+            return;
         }
+
+        snapshot.forEach(child => {
+            const data = child.val();
+            const key = child.key;
+
+            let badgeColor =
+                data.target_group === "HighCPM" ? "#d35400" :
+                data.target_group === "Others" ? "#6c757d" : "#007bff";
+
+            const div = document.createElement("div");
+            div.style = "background:#fff;padding:15px;margin-bottom:15px;border-radius:12px;border:1px solid #ddd;";
+
+            div.innerHTML = `
+                <span style="float:right;background:${badgeColor};color:#fff;font-size:10px;padding:3px 8px;border-radius:10px;">
+                    ${data.target_group || "Global"}
+                </span>
+
+                <h4>${data.title}</h4>
+
+                <div class="survey-desc">${data.desc}</div>
+
+                <p style="color:green;font-weight:bold;">💰 ${data.reward} Coins</p>
+
+                <button onclick="deleteSurvey('${key}')"
+                    style="width:100%;background:#ff4757;color:white;border:none;padding:10px;border-radius:8px;">
+                    Delete Survey
+                </button>
+            `;
+            listDiv.appendChild(div);
+        });
     });
 }
 
-// 4. Delete & Withdraw logic
+
+/*********************************
+ * DELETE SURVEY
+ *********************************/
 function deleteSurvey(key) {
-    if(confirm("Are you sure you want to delete this survey?")) {
+    if (confirm("Are you sure you want to delete this survey?")) {
         firebase.database().ref("surveys/" + key).remove();
     }
 }
 
+
+/*********************************
+ * LOAD WITHDRAW REQUESTS
+ *********************************/
 function loadWithdrawRequests() {
-    const listDiv = document.getElementById("pendingList"); 
+    const listDiv = document.getElementById("pendingList");
     if (!listDiv) return;
+
     firebase.database().ref("withdraw_requests").on("value", (snap) => {
         listDiv.innerHTML = "";
+
         if (!snap.exists()) {
             listDiv.innerHTML = "<p style='text-align:center;'>No pending requests.</p>";
             return;
         }
-        snap.forEach((child) => {
-            const key = child.key;
+
+        snap.forEach(child => {
             const data = child.val();
+            const key = child.key;
+
             if (data.status === "pending") {
                 const card = document.createElement("div");
-                card.style = "border:1px solid #eee; padding:15px; margin-top:10px; border-radius:12px; background:#fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);";
+                card.style = "border:1px solid #ddd;padding:15px;margin-top:10px;border-radius:12px;background:#fff;";
+
                 card.innerHTML = `
-                    <p style="margin:0; font-weight:bold;">Email: ${data.email}</p>
-                    <p style="margin:5px 0; color:#28a745;">Amount: ${data.amount} Coins</p>
-                    <p style="margin:0; font-size:12px; color:#666;">Method: ${data.method}</p>
-                    <div style="margin-top:10px;">
-                        <button onclick="updateWithdrawStatus('${key}', 'Approved')" style="background:#28a745; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-weight:bold;">Approve</button>
-                        <button onclick="updateWithdrawStatus('${key}', 'Rejected')" style="background:#dc3545; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-left:5px; font-weight:bold;">Reject</button>
-                    </div>
+                    <p><b>Email:</b> ${data.email}</p>
+                    <p><b>Amount:</b> ${data.amount} Coins</p>
+                    <p><b>Method:</b> ${data.method}</p>
+
+                    <button onclick="updateWithdrawStatus('${key}','approved')"
+                        style="background:green;color:white;padding:6px 10px;border:none;border-radius:6px;">
+                        Approve
+                    </button>
+
+                    <button onclick="updateWithdrawStatus('${key}','rejected')"
+                        style="background:red;color:white;padding:6px 10px;border:none;border-radius:6px;">
+                        Reject
+                    </button>
+
+                    <button onclick="inspectUser('${data.uid}')"
+                        style="background:#007bff;color:white;padding:6px 10px;border:none;border-radius:6px;">
+                        Inspect
+                    </button>
                 `;
                 listDiv.appendChild(card);
             }
@@ -141,8 +179,31 @@ function loadWithdrawRequests() {
     });
 }
 
-window.updateWithdrawStatus = function(key, status) {
-    if(confirm("Are you sure to " + status + " this request?")) {
-        firebase.database().ref("withdraw_requests/" + key).update({ status: status });
-    }
+
+/*********************************
+ * UPDATE WITHDRAW STATUS
+ *********************************/
+function updateWithdrawStatus(key, status) {
+    firebase.database().ref("withdraw_requests/" + key + "/status").set(status);
+}
+
+
+/*********************************
+ * INSPECT USER
+ *********************************/
+function inspectUser(uid) {
+    firebase.database().ref("users/" + uid).once("value")
+        .then(snap => {
+            if (!snap.exists()) {
+                alert("User not found!");
+                return;
+            }
+
+            const u = snap.val();
+            const completed = u.completed_surveys ? Object.keys(u.completed_surveys).length : 0;
+
+            alert(
+                `USER INFO\n\nEmail: ${u.email}\nBalance: ${u.balance}\nCompleted Surveys: ${completed}`
+            );
+        });
 }

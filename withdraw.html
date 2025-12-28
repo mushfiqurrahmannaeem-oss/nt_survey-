@@ -16,7 +16,6 @@
         .btn-withdraw { width: 100%; padding: 15px; background: #2c3e50; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
         .btn-withdraw:hover { background: #34495e; }
         
-        /* ফুটার লিংক স্টাইল */
         .footer-links { text-align: center; margin-top: 40px; padding: 20px; background: #fff; border-radius: 15px; margin: 20px; }
         .footer-links a { text-decoration: none; font-size: 13px; font-weight: 600; margin: 5px; padding: 8px 12px; border-radius: 8px; display: inline-block; }
         .link-about { color: #3498db; background: #ebf5fb; }
@@ -40,14 +39,14 @@
         <div class="input-group">
             <label><i class="fas fa-university"></i> Select Payment Method</label>
             <select id="wd_method" onchange="updatePlaceholder()">
-                <option value="Bkash">Bkash</option>
-                <option value="USD">USD (Binance/USDT)</option>
-            </select>
+            <option value="USD">USD (Binance / USDT)</option>
+    <option value="Bkash">Bkash</option>
+</select>
         </div>
 
         <div class="input-group">
-            <label id="account_label"><i class="fas fa-id-card"></i> Bkash Number</label>
-            <input type="text" id="wd_account" placeholder="Enter your Bkash number">
+            <label id="account_label"><i class="fas fa-id-card"></i> Account Details</label>
+            <input type="text" id="wd_account" placeholder="Enter Bkash number or Wallet address">
         </div>
 
         <div class="input-group">
@@ -76,20 +75,20 @@
     <script src="config.js"></script>
     <script src="withdraw.js"></script>
 
-    <script>
-        function updatePlaceholder() {
-            const method = document.getElementById("wd_method").value;
-            const label = document.getElementById("account_label");
-            const input = document.getElementById("wd_account");
+ <script>
+function updatePlaceholder() {
+    const method = document.getElementById("wd_method").value;
+    const account = document.getElementById("wd_account");
+    const label = document.getElementById("account_label");
 
-            if (method === "Bkash") {
-                label.innerHTML = '<i class="fas fa-id-card"></i> Bkash Number';
-                input.placeholder = "Enter your Bkash number";
-            } else {
-                label.innerHTML = '<i class="fas fa-wallet"></i> USD Address';
-                input.placeholder = "Enter USDT (TRC20) or Binance Address";
-            }
-        }
-    </script>
+    if (method === "Bkash") {
+        label.innerText = "Bkash Number";
+        account.placeholder = "01XXXXXXXXX";
+    } else {
+        label.innerText = "USD Wallet / Pay ID";
+        account.placeholder = "Binance Pay ID / USDT Address";
+    }
+}
+</script>
 </body>
 </html>
