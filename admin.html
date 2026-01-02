@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Panel - NT Survey</title>
+    <style>
+        html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; background-color: #f4f4f4; font-family: sans-serif; }
+        .admin-container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        .admin-card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .admin-input-group input, .admin-input-group select, .admin-input-group textarea {
+            display: block; width: 100%; margin-bottom: 12px; padding: 12px; box-sizing: border-box;
+            border: 1px solid #ddd; border-radius: 8px; font-size: 16px; outline: none;
+        }
+        .admin-btn { width: 100%; padding: 14px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .survey-item { background:#fff; padding:15px; margin-bottom:15px; border-radius:12px; border: 1px solid #eee; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .badge { position: absolute; top: 10px; right: 10px; background:#007bff; color:#fff; font-size: 10px; padding: 3px 8px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <div id="loginSection" class="admin-card">
+        <h2 style="text-align: center;">Admin Access</h2>
+        <div class="admin-input-group">
+            <input type="email" id="adminEmail" placeholder="Admin Email">
+            <input type="password" id="adminPassword" placeholder="Admin Password">
+        </div>
+        <button class="admin-btn" onclick="adminLogin()">Login</button>
+    </div>
+
+    <div id="adminDashboard" class="admin-card" style="display:none;">
+        <h3>Create New Survey</h3>
+        <div class="admin-input-group">
+            <input type="text" id="surveyTitle" placeholder="Survey Title">
+            <textarea id="surveyDesc" placeholder="Description..." style="height: 60px; resize: none;"></textarea>
+            
+            <label style="font-size: 13px; font-weight: bold; margin-bottom: 5px; display: block;">Target Country:</label>
+            <select id="targetGroup">
+                <option value="Global">🌐 Global (All Countries)</option>
+                <option value="HighCPM">🔥 High CPM Countries</option>
+                </select>
+
+            <input type="number" id="rewardCoins" placeholder="Reward Coins">
+            <input type="text" id="surveyLink" placeholder="Survey Link">
+        </div>
+        <button class="admin-btn" onclick="publishSurvey()">Publish</button>
+
+        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+        
+        <h3>Published Surveys</h3>
+        <div id="adminSurveyList">Loading...</div>
+
+        <h3>Withdraw Requests</h3>
+        <div id="pendingList">No pending requests.</div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="config.js"></script>
+<script src="admin.js"></script>
+
+</body>
+</html>
