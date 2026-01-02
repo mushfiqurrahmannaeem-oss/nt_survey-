@@ -13,18 +13,18 @@
         h2 { text-align: center; margin-bottom: 25px; color: #2c3e50; font-size: 24px; }
         
         .input-group { position: relative; margin-bottom: 15px; }
-        .input-group i { position: absolute; left: 15px; top: 15px; color: #7f8c8d; }
+        .input-group i { position: absolute; left: 15px; top: 15px; color: #7f8c8d; z-index: 5; }
         .input-group input, .input-group select { 
             display: block; width: 100%; padding: 14px 14px 14px 45px; 
             box-sizing: border-box; border: 1px solid #ddd; border-radius: 8px; 
-            font-size: 15px; transition: 0.3s;
+            font-size: 15px; transition: 0.3s; background-color: white;
         }
-        .input-group input:focus, .input-group select:focus { border-color: #3498db; outline: none; }
+        .input-group input:focus, .input-group select:focus { border-color: #3498db; outline: none; box-shadow: 0 0 5px rgba(52, 152, 219, 0.2); }
         
         .btn { width: 100%; padding: 14px; background-color: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
         .btn:hover { background-color: #1a252f; }
         
-        .ref-info { font-size: 12px; color: #27ae60; margin-top: -10px; margin-bottom: 10px; display: block; }
+        .ref-info { font-size: 12px; color: #27ae60; margin-top: -10px; margin-bottom: 10px; display: block; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -39,7 +39,7 @@
         <div class="input-group">
             <i class="fas fa-globe"></i>
             <select id="signupCountry" required>
-                <option value="" disabled selected>Loading Countries...</option>
+                <option value="" disabled selected>Loading All Countries...</option>
             </select>
         </div>
 
@@ -52,11 +52,13 @@
             <i class="fas fa-users"></i>
             <input type="text" id="referralCode" placeholder="Referral Code (Optional)">
         </div>
-        <span class="ref-info">* Enter a code to get bonus coins.</span>
+        <span class="ref-info"><i class="fas fa-gift"></i> Enter code for bonus coins!</span>
 
         <button class="btn" onclick="signupUser()">Create Account</button>
         
-        <p style="text-align: center; margin-top: 20px;">Already have an account? <a href="login.html" style="color:#3498db; text-decoration:none;">Login</a></p>
+        <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #7f8c8d;">
+            Already have an account? <a href="login.html" style="color:#3498db; text-decoration:none; font-weight:bold;">Login</a>
+        </p>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -66,24 +68,31 @@
     <script src="config.js"></script>
 
     <script>
-        // ফ্ল্যাগ ইমোজি জেনারেট করার ফাংশন
+        //     
         function getFlagEmoji(countryCode) {
-            return countryCode.toUpperCase().replace(/./g, char => 
-                String.fromCodePoint(char.charCodeAt(0) + 127397)
-            );
+            if (!countryCode) return "";
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char =>  127397 + char.charCodeAt());
+            return String.fromCodePoint(...codePoints);
         }
 
-        // দেশ এবং ফ্ল্যাগ লোড করা
+        //       
         async function loadCountries() {
             const countrySelect = document.getElementById("signupCountry");
             try {
+                // RestCountries API       
                 const res = await fetch("https://restcountries.com/v3.1/all?fields=name,cca2");
+                if (!res.ok) throw new Error("Network issues");
+                
                 const data = await res.json();
                 
-                // নাম অনুযায়ী সর্ট করা
+                //     (A to Z)
                 data.sort((a, b) => a.name.common.localeCompare(b.name.common));
 
                 countrySelect.innerHTML = '<option value="" disabled selected>Select Your Country</option>';
+                
                 data.forEach(country => {
                     const option = document.createElement("option");
                     const flag = getFlagEmoji(country.cca2);
@@ -92,12 +101,14 @@
                     countrySelect.appendChild(option);
                 });
             } catch (err) {
-                countrySelect.innerHTML = '<option value="Global">🌐 Global</option>';
+                console.error("Error loading countries:", err);
+                countrySelect.innerHTML = '<option value="Global"> Global / Other</option>';
             }
         }
-        window.onload = loadCountries;
 
-        // সাইনআপ ফাংশন (Referral সহ)
+        //      
+        window.addEventListener('DOMContentLoaded', loadCountries);
+
         function signupUser() {
             const email = document.getElementById("signupEmail").value;
             const password = document.getElementById("signupPassword").value;
@@ -105,22 +116,20 @@
             const refCode = document.getElementById("referralCode").value.trim();
 
             if(!email || !password || !country) {
-                alert("Please fill all fields");
+                alert("Please complete all required fields!");
                 return;
             }
 
             firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                const initialBalance = 0; // নতুন ইউজারের জন্য ০ কয়েন
-
-                // ডাটাবেসে ইউজার ডাটা সেভ করা
+                
                 const userData = {
                     uid: user.uid,
                     email: email,
                     country: country,
-                    balance: initialBalance,
-                    referralCode: user.uid.substring(0, 6).toUpperCase(), // নিজের জন্য একটি রেফার কোড তৈরি
+                    balance: 0,
+                    referralCode: user.uid.substring(0, 6).toUpperCase(),
                     referredBy: refCode || "none",
                     joinedAt: Date.now()
                 };
